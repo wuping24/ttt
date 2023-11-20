@@ -28,18 +28,18 @@ import re, requests, time, json
 from hashlib import md5
 import base64
 from tools import rsa_dec, aes_decrypt, djb2Hash, b64decode, sha1withrsa, check_file, get_config
-from tx import TX
+
 from iqy import iqy
 from yk import YouKu
 
 if __name__ == '__main__':
     check_file()
     config = get_config()
-    txck = config["txck"]
+  
     yk = config["yk"]
     aqy = config["aqy"]
     try:
-        tx = TX(txck)
+        
         iq = iqy(aqy)
         youku = YouKu(yk)
     except Exception as e:
@@ -47,9 +47,7 @@ if __name__ == '__main__':
         print(e)
     while True:
             url = input("请输入视频链接：")
-            if "v.qq.com" in url:
-                tx.run(url)
-            elif "iqiyi.com" in url:
+            if "iqiyi.com" in url:
                 iq.run(url)
             elif "youku.com" in url:
                 youku.start(url)

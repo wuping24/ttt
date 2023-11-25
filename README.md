@@ -61,6 +61,8 @@ txt需要下载https://www.52pojie.cn/thread-1631141-1-1.html，直接拖进下�
 1.删除腾讯支持
 
 2.增加优酷帧享
+![image](https://github.com/Tontonnow/ttt/assets/122251963/199b9f19-399a-48b7-af0d-37cc44d4c4ed)
+
 
 ## 2023-11-25更新
 1.修复优酷key出错

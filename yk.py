@@ -111,6 +111,7 @@ class YouKu:
             keys = {}
             tv_stream = self.get_TV_stream(vid)
             stream.extend(tv_stream)
+
             for video in stream:
                 m3u8_url = video["m3u8_url"]
                 width = video["width"]
@@ -119,6 +120,8 @@ class YouKu:
                 size = '{:.1f}'.format(float(size) / 1048576)
                 drm_type = video["drm_type"]
                 audio_lang = video["audio_lang"]
+                if audio_lang == "default":
+                    audio_lang="guoyu"
                 if video['drm_type'] == "default":
                     key = ""
                 elif audio_lang not in keys.keys():
@@ -173,7 +176,7 @@ class YouKu:
                     m3u8_path = "{}.m3u8".format(title)
                     with open(m3u8_path, "w", encoding="utf-8") as f:
                         f.write(m3u8_url)
-                    key = "{}:{}".format(keyid, base64.b64decode(key).hex())
+                    key = "{}:{}".format(keyid, base64.b64decode(key).hex()) if ":" not  in key else key
                     common_args = f"N_m3u8DL-RE.exe \"{m3u8_path}\" --tmp-dir ./cache --save-name \"{title}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30 --auto-select --check-segments-count"
                     cmd = f"{common_args} --key {key}  -M format=mp4"
                 with open("{}.bat".format(title), "a", encoding="gbk") as f:

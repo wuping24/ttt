@@ -121,7 +121,7 @@ class YouKu:
                 drm_type = video["drm_type"]
                 audio_lang = video["audio_lang"]
                 if audio_lang == "default":
-                    audio_lang="guoyu"
+                    audio_lang = "guoyu"
                 if video['drm_type'] == "default":
                     key = ""
                 elif audio_lang not in keys.keys():
@@ -153,17 +153,18 @@ class YouKu:
                 savepath = os.path.join(os.getcwd(), "/download/yk")
                 rm3u8_url = m3u8_url.replace("%", "%%")
                 if rm3u8_url.startswith("http"):
-                    common_args = f"N_m3u8DL-RE.exe \"{rm3u8_url}\" --tmp-dir ./cache --save-name \"{title}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30 --auto-select --check-segments-count"
+                    common_args = f"N_m3u8DL-RE.exe \"{rm3u8_url}\" --tmp-dir ./cache --save-name \"{savename}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30 --auto-select --check-segments-count"
                     if drm_type == "default":
                         cmd = common_args
                     elif drm_type == "cbcs":
                         cmd = f"{common_args} --key {key}  -M format=mp4"
                     else:
+                        key = key if ":" not in key else base64.b64encode(bytes.fromhex(key.split(":")[1])).decode()
                         txt = f'''
                     #OUT,{savepath}
                     #DECMETHOD,ECB
                     #KEY,{key}
-                    {title}_{resolution}_{size},{m3u8_url}
+                    {savename},{m3u8_url}
                                         '''
                         with open("{}.txt".format(title), "a", encoding="gbk") as f:
                             f.write(txt)
@@ -172,11 +173,11 @@ class YouKu:
                 else:
                     uri = re.findall(r'URI="(.*)"', m3u8_url)[0]
                     m3u8_text = requests.get(uri).text
-                    keyid = re.findall(r'KEYID=0x(.*),IV', m3u8_text)[0]
+                    keyid = re.findall(r'KEYID=0x(.*),IV', m3u8_text)[0].lower()
                     m3u8_path = "{}.m3u8".format(title)
                     with open(m3u8_path, "w", encoding="utf-8") as f:
                         f.write(m3u8_url)
-                    key = "{}:{}".format(keyid, base64.b64decode(key).hex()) if ":" not  in key else key
+                    key = "{}:{}".format(keyid, base64.b64decode(key).hex()) if ":" not in key else key
                     common_args = f"N_m3u8DL-RE.exe \"{m3u8_path}\" --tmp-dir ./cache --save-name \"{title}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30 --auto-select --check-segments-count"
                     cmd = f"{common_args} --key {key}  -M format=mp4"
                 with open("{}.bat".format(title), "a", encoding="gbk") as f:
@@ -349,6 +350,6 @@ class YouKu:
 
 
 if __name__ == '__main__':
-    cookie = ""
+    cookie = ''
     youku = YouKu(cookie)
     youku.start()

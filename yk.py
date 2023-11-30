@@ -5,8 +5,8 @@ from urllib.parse import parse_qsl, urlsplit
 import base64
 from Crypto.Cipher import AES
 from tabulate import tabulate
-from pywidevineb.L3.cdm import deviceconfig
-from pywidevineb.L3.decrypt.wvdecryptcustom import WvDecrypt
+from pywidevine.L3.cdm import deviceconfig
+from pywidevine.L3.decrypt.wvdecryptcustom import WvDecrypt
 from tools import get_pssh, dealck
 
 requests = requests.Session()

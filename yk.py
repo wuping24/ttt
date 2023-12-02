@@ -122,6 +122,11 @@ class YouKu:
                 audio_lang = video["audio_lang"]
                 if audio_lang == "default":
                     audio_lang = "guoyu"
+                language = []
+                language = re.findall(r'LANGUAGE="([\w\s]+)"', m3u8_url)
+                # print("language是------------------>>>>>", language)
+                if 'en' in language:
+                    audio_lang = "en"
                 if video['drm_type'] == "default":
                     key = ""
                 elif audio_lang not in keys.keys():

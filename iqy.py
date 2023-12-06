@@ -176,7 +176,7 @@ class iqy:
         dash = f'/dash?'
         for a, b in params.items():
             dash += f"{a}={b}&"
-        dash = dash[:-1] + "&bop=" + parse.quote(self.bop) + "&ut=14"
+        dash = dash[:-1] + "&bop=" + parse.quote(self.bop) +  "&ut=13&ut=4&ut=5&ut=14&ut=57"
         vf = md5(dash + "tle8orw4vetejc62int3uewiniecr18i")
         dash += f"&vf={vf}"
         return dash

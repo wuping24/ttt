@@ -7,9 +7,9 @@ import binascii
 from google.protobuf.message import DecodeError
 from google.protobuf import text_format
 
-from pywidevineb.L3.cdm.formats import wv_proto2_pb2 as wv_proto2
-from pywidevineb.L3.cdm.session import Session
-from pywidevineb.L3.cdm.key import Key
+from pywidevine.L3.cdm.formats import wv_proto2_pb2 as wv_proto2
+from pywidevine.L3.cdm.session import Session
+from pywidevine.L3.cdm.key import Key
 from Cryptodome.Random import get_random_bytes
 from Cryptodome.Random import random
 from Cryptodome.Cipher import PKCS1_OAEP, AES

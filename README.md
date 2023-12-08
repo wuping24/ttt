@@ -63,7 +63,11 @@ txt需要下载https://www.52pojie.cn/thread-1631141-1-1.html，直接拖进下�
 2.增加优酷帧享
 ![image](https://github.com/Tontonnow/ttt/assets/122251963/199b9f19-399a-48b7-af0d-37cc44d4c4ed)
 
-
 ## 2023-11-25更新
 1.修复优酷key出错
+## 2023-12-8更新
+2.增加优酷dts等音效
+![QQ截图20231208185853](https://github.com/Tontonnow/ttt/assets/122251963/34cf85a4-18e4-4177-a07a-c57e9dc6303a)
+![image](https://github.com/Tontonnow/ttt/assets/122251963/efb5746c-33df-48cc-9077-fb93f45e8975)
+
 

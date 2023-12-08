@@ -68,6 +68,7 @@ txt需要下载https://www.52pojie.cn/thread-1631141-1-1.html，直接拖进下�
 ## 2023-12-8更新
 2.增加优酷dts等音效
 ![QQ截图20231208185853](https://github.com/Tontonnow/ttt/assets/122251963/34cf85a4-18e4-4177-a07a-c57e9dc6303a)
+下载选项选择0，自动生成m3u8大师列表，暂时支持单语种
 ![image](https://github.com/Tontonnow/ttt/assets/122251963/efb5746c-33df-48cc-9077-fb93f45e8975)
 
 

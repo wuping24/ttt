@@ -66,14 +66,16 @@ txt需要下载https://www.52pojie.cn/thread-1631141-1-1.html，直接拖进下�
 ## 2023-11-25更新
 1.修复优酷key出错
 ## 2023-12-8更新
-2.增加优酷dts等音效
+1.增加优酷dts等音效
 ![QQ截图20231208185853](https://github.com/Tontonnow/ttt/assets/122251963/34cf85a4-18e4-4177-a07a-c57e9dc6303a)
 下载选项选择0，自动生成m3u8大师列表，暂时支持单语种
 ![image](https://github.com/Tontonnow/ttt/assets/122251963/efb5746c-33df-48cc-9077-fb93f45e8975)
 ## 2024-1-25更新
 1.增加音效和杜比
+
 2.测试支持多音轨
 ![image](https://github.com/Tontonnow/ttt/assets/122251963/770479d9-ce45-4083-8766-801cb164c6f3)
+
 ![image](https://github.com/Tontonnow/ttt/assets/122251963/d8200b25-7f95-4eed-9df0-82a94d3bbaa4)
 
 

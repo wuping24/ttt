@@ -315,6 +315,7 @@ class YouKu:
                        "pid": "52f8ca2b4982124b", })
         play_ability_v2 = ["1111111111", "0111111111", 1111000000, 1101110000, 1101101000, 11101100100, 1101100010]
         # "play_ability_v2": "1111111111",  # 1:dolby_vision 2:hdr10 3:dtsc -5:dolby_atmos -4:dolby_around -3:dts -2:aac_hd3_51
+        #仅供测试，建议自行修改，减少请求次数，否则容易封，提示客户端无权播放
         for v2 in play_ability_v2:
             params["play_ability_v2"] = v2
             getdata()
@@ -388,7 +389,7 @@ class YouKu:
             m3u8data = "#EXTM3U\n"
             for video in video_lists_a:
                 audioType = video[6]
-                lang = audioType.split("_")[1]
+                lang = audioType.split("_")[-1]
                 m3u8_url = video[-2]
                 key=video[4]
                 if lang not in langs:
@@ -401,6 +402,16 @@ class YouKu:
                         keys += f" --key {key}"
                     langs.append(lang)
                 videoType = video[5].split("_")[1]
+                '''                
+                if videoType not in videoTypes:
+                    m3u8data += "\n".join(m3u8_url.split("\n")[2:4])
+                    videoTypes.append(videoType)
+                elif audioType not in audioTypes:
+                    m3u8data += m3u8_url.split("\n")[1]
+                    audioTypes.append(audioType)
+                部分视频存在多个音频流,会出错
+                所以直接把所有的m3u8链接都写入m3u8文件，手动在下载时选择
+                '''
                 if videoType not in videoTypes or audioType not in audioTypes:
                     m3u8data += "\n".join(m3u8_url.split("\n")[1:-2])
                     videoTypes.add(videoType)

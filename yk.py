@@ -106,13 +106,13 @@ class YouKu:
             m3u8_path = "{}.m3u8".format(title)
             with open(m3u8_path, "w", encoding="utf-8") as f:
                 f.write(m3u8_url)
+            common_args = f"N_m3u8DL-RE.exe \"{m3u8_path}\" --tmp-dir ./cache --save-name \"{title}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30  --check-segments-count"
             if ":" not in key:
-                uri = re.findall(r'URI="(.*)"', m3u8_url)[0]
+                uri = re.findall(r'(http.*)\n', m3u8_url)[0]
                 m3u8_text = requests.get(uri).text
                 keyid = re.findall(r'KEYID=0x(.*),IV', m3u8_text)[0].lower()
-                key = "{}:{}".format(keyid, base64.b64decode(key).hex())
-            common_args = f"N_m3u8DL-RE.exe \"{m3u8_path}\" --tmp-dir ./cache --save-name \"{title}\" --save-dir \"{savepath}\" --thread-count 16 --download-retry-count 30  --check-segments-count"
-            cmd = f"{common_args} --key {key}  -M format=mp4"
+                key = "--key {}:{}".format(keyid, base64.b64decode(key).hex())
+            cmd = f"{common_args}  {key}  -M format=mp4"
         with open("{}.bat".format(title), "a", encoding="gbk") as f:
             f.write(cmd)
             f.write("\n")
@@ -161,7 +161,7 @@ class YouKu:
                 size = '{:.1f}'.format(float(size) / 1048576)
                 drm_type = video["drm_type"]
                 audio_lang = video["audio_lang"]
-                audio = video['stream_ext'].get("audioGroupId", "")
+                audio = video['stream_ext'].get("audioGroupId", "") or "default"
                 if audio_lang == "default":
                     audio_lang = "guoyu"
                 language = []
@@ -190,7 +190,7 @@ class YouKu:
                      video.get("size", 0)])
             video_lists = sorted(video_lists, key=lambda x: x[-1], reverse=True)
             tb = tabulate([[*video_lists[i][:7]] for i in range(len(video_lists))],
-                          headers=["标题", "分辨率", "视频大小", "drm_type", "base64key", "stream_type", "audio"],
+                          headers=["标题", "视频大小", "分辨率", "drm_type", "base64key", "stream_type", "audio"],
                           tablefmt="pretty",
                           showindex=range(1, len(video_lists) + 1))
             ch = input(f"{tb}\n请输入要下载的视频序号,输入0尝试自动选择最高清晰度视频：")
@@ -264,7 +264,7 @@ class YouKu:
             "client_ip": "192.168.3.1",
             "client_ts": "1697343919",
             "utid": self.utida,
-            "pid": "36281532078091",
+            "pid": "b777e6ae3c99e26",
             # HAIER_PID = "36214723575196"; JIMI_PID = "3b777e6ae3c99e26";SONY_PID = "36281532078091";
             "player_type": "dnahard",  # system:hls,dnahard: cmfv
             "app_ver": "11.4.6.4",  # 2121104604,2121100600,11.0.6.0,11.4.6.4
@@ -309,13 +309,12 @@ class YouKu:
         params["player_source"] = "21"
         params["player_type"] = "system"
         getdata()
-        url = "https://ups.youku.com/ups/get.json"
-        params['ccode'] = '0103010102'
-        params.update({"app_ver": "2121104604",
-                       "play_ability": "536870911",
+        params.update({"app_ver": "11.4.7.0",
+                       "play_ability": "274877906943",
                        "play_ability_v2": "1111111",
                        "pid": "52f8ca2b4982124b", })
-        play_ability_v2 = [1222221, 1222211, 1222121, 1221221, 1212221, 1122221]
+        play_ability_v2 = ["1111111111", "0111111111", 1111000000, 1101110000, 1101101000, 11101100100, 1101100010]
+        # "play_ability_v2": "1111111111",  # 1:dolby_vision 2:hdr10 3:dtsc -5:dolby_atmos -4:dolby_around -3:dts -2:aac_hd3_51
         for v2 in play_ability_v2:
             params["play_ability_v2"] = v2
             getdata()
@@ -354,10 +353,12 @@ class YouKu:
             "encryptR_client": self.R,
             "skh": 1,
             "last_clarity": 5,
-            "clarity_chg_ts": 1689341442
+            "clarity_chg_ts": 1689341442,
+             "needad": 0,
         }
         ad_params = {
             "vip": 1,
+            "needad":0,
         }
         params_data = {
             "steal_params": json.dumps(steal_params),
@@ -378,32 +379,38 @@ class YouKu:
             break
 
     def save_m3u82(self, video_lists):
-        a = []
-        b = set()
-        for video in video_lists:
-            audio_combination = video[6]
-            if audio_combination not in b:
-                a.append(video)
-                b.add(audio_combination)
-        c = [x for x in a if "cmfv5hd" in x[5]]
-        if c:
+        video_lists_a = [x for x in video_lists if "cmfv5hd" in x[5]]
+        if video_lists_a:
+            videoTypes = set()
+            audioTypes = []
+            langs = []
+            keys=""
             m3u8data = "#EXTM3U\n"
-            for i in range(len(c)):
-                m3u8_url = c[i][-2]
-                if i == 0:
-                    m3u8_url = "\n".join(m3u8_url.split("\n")[1:5])
-                else:
-                    m3u8_url = "\n".join(m3u8_url.split("\n")[1:3])
-                m3u8data += m3u8_url + "\n"
+            for video in video_lists_a:
+                audioType = video[6]
+                lang = audioType.split("_")[1]
+                m3u8_url = video[-2]
+                key=video[4]
+                if lang not in langs:
+                    if ":" not in key:
+                        uri = re.findall(r'(http.*)\n', m3u8_url)[0]
+                        m3u8_text = requests.get(uri).text
+                        keyid = re.findall(r'KEYID=0x(.*),IV', m3u8_text)[0].lower()
+                        keys += "--key {}:{}".format(keyid, base64.b64decode(key).hex())
+                    else:
+                        keys += f" --key {key}"
+                    langs.append(lang)
+                videoType = video[5].split("_")[1]
+                if videoType not in videoTypes or audioType not in audioTypes:
+                    m3u8data += "\n".join(m3u8_url.split("\n")[1:-2])
+                    videoTypes.add(videoType)
+                    audioTypes.append(audioType)
             m3u8data += "\n#EXT-X-ENDLIST"
-            c[0][7] = m3u8data
-            video = c[0]
-            self.save_m3u8(video)
+            video_lists_a[0][7] = m3u8data
+            video_lists_a[0][4] = keys
+            self.save_m3u8(video_lists_a[0])
         else:
-            video = video_lists[0]
-            self.save_m3u8(video)
-
-
+            self.save_m3u8(video_lists[0])
 if __name__ == '__main__':
     cookie = ''
     youku = YouKu(cookie)

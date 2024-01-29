@@ -397,7 +397,7 @@ class YouKu:
                         uri = re.findall(r'(http.*)\n', m3u8_url)[0]
                         m3u8_text = requests.get(uri).text
                         keyid = re.findall(r'KEYID=0x(.*),IV', m3u8_text)[0].lower()
-                        keys += "--key {}:{}".format(keyid, base64.b64decode(key).hex())
+                        keys += " --key {}:{}".format(keyid, base64.b64decode(key).hex())
                     else:
                         keys += f" --key {key}"
                     langs.append(lang)

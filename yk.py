@@ -242,8 +242,7 @@ class YouKu:
         if Correct:
             return Correct, keyswvdecrypt
 
-    def get_TV_stream(self, vid):
-        headers = {
+       headers = {
             "user-agent": "OTTSDK;1.0.8.6;Android;9;2203121C"
         }
 
@@ -259,7 +258,7 @@ class YouKu:
                 return None, []
 
         url = "https://ups.youku.com/ups/get.json"  # light_get.json
-        params = {
+        '''        params = {
             "ckey": "7B19C0AB12633B22E7FE81271162026020570708D6CC189E4924503C49D243A0DE6CD84A766832C2C99898FC5ED31F3709BB3CDD82C96492E721BDD381735026",
             "client_ip": "192.168.3.1",
             "client_ts": "1697343919",
@@ -315,7 +314,56 @@ class YouKu:
                        "pid": "52f8ca2b4982124b", })
         play_ability_v2 = ["1111111111", "0111111111", 1111000000, 1101110000, 1101101000, 11101100100, 1101100010]
         # "play_ability_v2": "1111111111",  # 1:dolby_vision 2:hdr10 3:dtsc -5:dolby_atmos -4:dolby_around -3:dts -2:aac_hd3_51
-        #仅供测试，建议自行修改，减少请求次数，否则容易封，提示客户端无权播放
+        for v2 in play_ability_v2:
+            params["play_ability_v2"] = v2
+            getdata()
+        url = "https://ups.youku.com/ups/light_get.json"
+        params["ccode"] = "0103010280"
+        params["drm_type"] = 0'''
+        params = {
+            "ckey": "7B19C0AB12633B22E7FE81271162026020570708D6CC189E4924503C49D243A0DE6CD84A766832C2C99898FC5ED31F3709BB3CDD82C96492E721BDD381735026",
+            "client_ip": "192.168.3.1",
+            "client_ts": "1697343919",
+            "utid": self.utida,
+            "pid": "b777e6ae3c99e26",
+            # HAIER_PID = "36214723575196"; JIMI_PID = "3b777e6ae3c99e26";SONY_PID = "36281532078091";
+            "player_type": "dnahard",  # system:hls,dnahard: cmfv
+            "app_ver": "11.4.6.4",  # 2121104604,2121100600,11.0.6.0,11.4.6.4
+            "ccode": "0103010261",  # sony :0103010261, jimi:010301025C,haier:0103010275 280
+            "player_source": "21",  # 20 sdr 21hfr 22dolby 23bit10
+            "encryptR_client": "fTWuKHLOVUoOide+VH/h8w==",
+            "key_index": "key01",
+            "vid": vid,
+            "h265": "1",
+            "media_type": "standard,sei",
+            "client_id": "",
+            "ptoken": self.ptoken,
+            "drm_type": "7",
+            "extag": "EXT-X-PRIVINF",
+            "extag_fields": "STREAMTYPE",
+            "device_name": "XR-98X90L",
+            "play_ability": "405929984",
+            "preferClarity": "23",
+            "master_m3u8": "0",
+            "play_ability_v2": "2222222",
+            "site": "1",
+            "fu": "1",
+            "vs": "1.0",
+            "os": "android",
+            "osv": "12.1.1",
+            "bt": "tv",
+            "aw": "a",
+            "p": "27",
+            "mdl": "XR-98X90L",
+            "device_model": "XR-98X90L",
+            "": ""
+        }
+        streamss=[]
+        player_source = [20, 23, 22, 21]
+        for i in player_source:
+            params["player_source"] = str(i)
+            getdata()
+        play_ability_v2=["11111111111","10111111111"]
         for v2 in play_ability_v2:
             params["play_ability_v2"] = v2
             getdata()

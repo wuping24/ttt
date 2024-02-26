@@ -241,7 +241,7 @@ class YouKu:
         Correct, keyswvdecrypt = wvdecrypt.start_process()
         if Correct:
             return Correct, keyswvdecrypt
-
+    def get_TV_stream(self, vid):
        headers = {
             "user-agent": "OTTSDK;1.0.8.6;Android;9;2203121C"
         }
